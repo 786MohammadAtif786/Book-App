@@ -1,4 +1,3 @@
-// routes/libraryRoutes.js
 const express = require('express');
 const { getLibraries, getLibraryById, createLibrary, updateLibrary, deleteLibrary, getLibraryInventory, addBookToInventory, removeBookFromInventory } = require('../controllers/libraryController');
 const authMiddleware = require('../middlewares/authMiddleware');

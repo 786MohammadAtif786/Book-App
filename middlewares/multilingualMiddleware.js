@@ -1,4 +1,3 @@
-// middlewares/multilingualMiddleware.js
 const messages = {
   en: {
     unauthorized: 'Please authenticate.',

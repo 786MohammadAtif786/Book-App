@@ -1,8 +1,7 @@
-// models/Book.js
 const mongoose = require('mongoose');
 
 const bookSchema = new mongoose.Schema({
-  title: { type: String, required: true },
+  title: { type: String,trim: true, required: true },
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   library: { type: mongoose.Schema.Types.ObjectId, ref: 'Library', required: true },
   borrower: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },

@@ -1,4 +1,3 @@
-// routes/bookRoutes.js
 const express = require('express');
 const { getBooks, getBookById, createBook, updateBook, deleteBook } = require('../controllers/bookController');
 const authMiddleware = require('../middlewares/authMiddleware');

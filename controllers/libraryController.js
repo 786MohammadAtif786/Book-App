@@ -1,24 +1,36 @@
-// controllers/libraryController.js
-const Library = require('../models/Library');
-const Book = require('../models/Book');
+const Library = require("../models/Library");
+const Book = require("../models/Book");
+const response = require("../utils/response");
 
 const getLibraries = async (req, res) => {
-  const libraries = await Library.find().populate({
-    path: 'books',
-    populate: { path: 'borrower' }
-  });
-  res.send(libraries);
+  try {
+    const libraries = await Library.find().populate({
+      path: "books",
+      populate: { path: "borrower" },
+    });
+    if (!libraries) {
+      return response(res, false, null, "Library not found.", 404);
+    }
+    return response(res, true, libraries, "libraries found successfully", 200);
+  } catch (err) {
+    return response(res, false, null, "internal server error.", 500);
+  }
 };
 
 const getLibraryById = async (req, res) => {
+ try {
   const library = await Library.findById(req.params.id).populate({
-    path: 'books',
-    populate: { path: 'borrower' }
+    path: "books",
+    populate: { path: "borrower" },
   });
   if (!library) {
-    return res.status(404).send({ error: 'Library not found.' });
+    return response(res, false, null, 'Library not found.', 404);
   }
-  res.send(library);
+  return response(res, true, library, 'Library  found successfully.', 200);
+ } catch(err) {
+  return response(res, false, null, "internal server error.", 500);
+ }
+  
 };
 
 const createLibrary = async (req, res) => {
@@ -28,9 +40,11 @@ const createLibrary = async (req, res) => {
 };
 
 const updateLibrary = async (req, res) => {
-  const library = await Library.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  const library = await Library.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
   if (!library) {
-    return res.status(404).send({ error: 'Library not found.' });
+    return res.status(404).send({ error: "Library not found." });
   }
   res.send(library);
 };
@@ -38,15 +52,15 @@ const updateLibrary = async (req, res) => {
 const deleteLibrary = async (req, res) => {
   const library = await Library.findByIdAndDelete(req.params.id);
   if (!library) {
-    return res.status(404).send({ error: 'Library not found.' });
+    return res.status(404).send({ error: "Library not found." });
   }
   res.send(library);
 };
 
 const getLibraryInventory = async (req, res) => {
-  const library = await Library.findById(req.params.id).populate('books');
+  const library = await Library.findById(req.params.id).populate("books");
   if (!library) {
-    return res.status(404).send({ error: 'Library not found.' });
+    return res.status(404).send({ error: "Library not found." });
   }
   res.send(library.books);
 };
@@ -55,7 +69,7 @@ const addBookToInventory = async (req, res) => {
   const { bookId } = req.body;
   const library = await Library.findById(req.params.id);
   if (!library) {
-    return res.status(404).send({ error: 'Library not found.' });
+    return res.status(404).send({ error: "Library not found." });
   }
   library.books.push(bookId);
   await library.save();
@@ -66,11 +80,20 @@ const removeBookFromInventory = async (req, res) => {
   const { bookId } = req.params;
   const library = await Library.findById(req.params.id);
   if (!library) {
-    return res.status(404).send({ error: 'Library not found.' });
+    return res.status(404).send({ error: "Library not found." });
   }
   library.books.pull(bookId);
   await library.save();
   res.send(library);
 };
 
-module.exports = { getLibraries, getLibraryById, createLibrary, updateLibrary, deleteLibrary, getLibraryInventory, addBookToInventory, removeBookFromInventory };
+module.exports = {
+  getLibraries,
+  getLibraryById,
+  createLibrary,
+  updateLibrary,
+  deleteLibrary,
+  getLibraryInventory,
+  addBookToInventory,
+  removeBookFromInventory,
+};

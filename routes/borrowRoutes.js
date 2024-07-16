@@ -1,4 +1,3 @@
-// routes/borrowRoutes.js
 const express = require('express');
 const { borrowBook, returnBook } = require('../controllers/borrowController');
 const authMiddleware = require('../middlewares/authMiddleware');
