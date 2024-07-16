@@ -12,10 +12,10 @@ const register = async (req, res) => {
   await user.save();
   return response(res, true, user, 'User Created SuccessFully', 201);
  } catch(err) {
-    if(err.code == 1100) {
+    if(err.code == 11000) {
       return response(res, false, null, 'User is Already Exists', 400);
     }
-    return response(res, false, null, 'Internal server error', 500);
+    return response(res, false, err, 'Internal server error', 500);
  }
 };
 
@@ -39,6 +39,7 @@ const login = async (req, res) => {
     userObj.token = token;
     return response(res, true, userObj, 'User Login SuccessFully', 200);
   } catch(err) {
+    console.log(err);
     return response(res, false, null, 'Internal server error', 500);
   }
 };
